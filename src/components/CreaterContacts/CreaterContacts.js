@@ -1,33 +1,27 @@
 import { Box } from 'components/Box';
 import { Formik, Field } from 'formik';
-import { useAddContactMutation, useGetContactsQuery } from 'redux/contactsSlice';
 import PropTypes from 'prop-types';
-import { StyledForm, FormButton } from './Phonebook.styled';
+import { StyledForm, FormButton } from './CreaterContacts.styled';
+import { useSelector } from 'react-redux';
+import { selectContacts } from 'redux/contacts/contactsSelectors';
 
-const INITIAL_VALUES = { name: "", number: "" }
 
-export const Phonebook = ({ title }) => {
-    const [addContact, {isLoading}] = useAddContactMutation()
-    const { data = [] } = useGetContactsQuery()
 
-    const handleAddContact = async value => {
-        if (data.some(contact => contact.name === value.name)) {
-            alert(`${value.name} is alredy in contarts`)
-        } else {
-            try {
-                await addContact(value);
-                alert(`${value.name} added to phonebook`)
-            } catch (error) {
-                alert("Error. Something wrong")
-            }
-        }
+export const CreaterContacts = ({ title, INITIAL_VALUES, subbmitForm}) => {
+    const {  isLoading } = useSelector(selectContacts);
+    
+    
+
+    const hendleSubbmitForm =  (value ,{ resetForm })=> {
+        subbmitForm(value)
+        resetForm()
     }
     return (
-        <Box py={5} px={4}>
+        <Box px={4}>
             <h2>{title}</h2>
 
             <Formik initialValues={INITIAL_VALUES}
-                onSubmit={handleAddContact}>
+                onSubmit={hendleSubbmitForm}>
                 <StyledForm autoComplete='off'>
                     <Box display="inline-flex"
                         flexDirection="column"
@@ -57,7 +51,7 @@ export const Phonebook = ({ title }) => {
                     </Box>
                             
                     <FormButton type="submit" disabled={isLoading}>
-                        Add contact
+                        {title}
                     </FormButton>
                     
                 </StyledForm>
@@ -66,6 +60,7 @@ export const Phonebook = ({ title }) => {
     )   
 }
 
-Phonebook.propTypes = {
+CreaterContacts.propTypes = {
     title: PropTypes.string.isRequired,
+    subbmitForm: PropTypes.func.isRequired
 }
