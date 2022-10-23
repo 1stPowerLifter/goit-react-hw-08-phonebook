@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 
 export const Conteiner = styled.div`
-min-height: calc(100vh - 50px);
+min-height: calc(100vh - 56px);
 display: flex;
 align-items: center;
 justify-content: center;
