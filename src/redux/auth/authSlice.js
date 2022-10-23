@@ -1,4 +1,4 @@
-import { createSlice, isAllOf } from '@reduxjs/toolkit';
+import { createSlice, isAnyOf } from '@reduxjs/toolkit';
 import { register, logIn, logOut, refreshUser } from './authOperations';
 
 const initialState = {
@@ -34,9 +34,9 @@ const authSlice = createSlice({
       .addCase(logOut.fulfilled, handleLogOut)
       .addCase(refreshUser.fulfilled, handleRefreshUser)
       .addMatcher(
-        isAllOf(register.fulfilled, logIn.fulfilled), handleTrueAuth)
+        isAnyOf(register.fulfilled, logIn.fulfilled), handleTrueAuth)
       .addMatcher(
-        isAllOf(refreshUser.pending, refreshUser.rejected), state => state.isRefreshing = true)
+        isAnyOf(refreshUser.pending, refreshUser.rejected), state => state.isRefreshing = true)
 });
 
 export const authReducer = authSlice.reducer;
