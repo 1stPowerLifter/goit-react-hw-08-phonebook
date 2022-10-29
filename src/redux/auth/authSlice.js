@@ -26,8 +26,12 @@ const handleRefreshUser = (state, action) => {
   state.isRefreshing = false;
 };
     
-const handleRefreshFalse = (state) => {
+const handleRefreshing = (state) => {
   state.isRefreshing = true
+};
+
+const handleRefreshFalse = (state) => {
+  state.isRefreshing = false
 };
 
 const authSlice = createSlice({
@@ -37,10 +41,10 @@ const authSlice = createSlice({
     builder
       .addCase(logOut.fulfilled, handleLogOut)
       .addCase(refreshUser.fulfilled, handleRefreshUser)
+      .addCase(refreshUser.pending, handleRefreshing)
+      .addCase(refreshUser.rejected, handleRefreshFalse)
       .addMatcher(
         isAnyOf(register.fulfilled, logIn.fulfilled), handleTrueAuth)
-      .addMatcher(
-        isAnyOf(refreshUser.pending, refreshUser.rejected), handleRefreshFalse)
 });
 
 export const authReducer = authSlice.reducer;
